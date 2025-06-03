@@ -16,7 +16,7 @@ namespace EmployeesApp.Infrastructure.Persistance.Repositories
         }
 
         //Classic C# syntax for GetAll()
-        public async Task<Employee[]> GetAllAsync() => await context.Employees.ToArrayAsync();
+        public async Task<Employee[]> GetAllAsync() => await context.Employees.Include(e => e.Company).ToArrayAsync();
 
         public async Task<Employee?> GetByIdAsync(int id) => await context.Employees
             .FindAsync(id);
