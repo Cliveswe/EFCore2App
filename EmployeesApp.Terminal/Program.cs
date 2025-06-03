@@ -34,19 +34,19 @@ internal class Program
 
     private static void ListAllEmployees()
     {
-        foreach (var item in employeeService.GetAll())
+        foreach (var item in employeeService.GetAllAsync().Result)
             Console.WriteLine(item.Name);
 
         Console.WriteLine("------------------------------");
     }
 
-    private static void ListEmployee(int employeeID)
+    private static async Task ListEmployee(int employeeID)
     {
         Employee? employee;
 
         try
         {
-            employee = employeeService.GetById(employeeID);
+            employee = await employeeService.GetByIdAsync(employeeID);
             Console.WriteLine($"{employee?.Name}: {employee?.Email}");
             Console.WriteLine("------------------------------");
         }

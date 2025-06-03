@@ -14,6 +14,7 @@ public class ApplicationContext(DbContextOptions<ApplicationContext> options)
     : DbContext(options)
 {
     public DbSet<Employee> Employees { get; set; } = null!;
+    public DbSet<Company> Companies { get; set; } = null!;
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -31,6 +32,10 @@ public class ApplicationContext(DbContextOptions<ApplicationContext> options)
             .HasDefaultValue(0m)
             .IsRequired();
 
+        modelBuilder.Entity<Employee>()
+            .HasOne(x => x.Company)
+            .WithOne(x => x.Employee)
+            .HasForeignKey<Company>(x => x.Id);
 
         modelBuilder.Entity<Employee>().HasData(
             new Employee()
