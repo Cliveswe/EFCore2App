@@ -32,10 +32,7 @@ public class ApplicationContext(DbContextOptions<ApplicationContext> options)
             .HasDefaultValue(0m)
             .IsRequired();
 
-        modelBuilder.Entity<Employee>()
-            .HasOne(x => x.Company)
-            .WithOne(x => x.Employee)
-            .HasForeignKey<Company>(x => x.Id);
+        
 
         modelBuilder.Entity<Employee>().HasData(
             new Employee()
