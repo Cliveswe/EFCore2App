@@ -9,19 +9,19 @@ namespace EmployeesApp.Web.Controllers;
 public class EmployeesController(IEmployeeService service) : Controller
 {
     [HttpGet("")]
-    public IActionResult Index()
+    public async Task<IActionResult> IndexAsync()
     {
-        var model = service.GetAll();
+        var model = await service.GetAllAsync();
 
         var viewModel = new IndexVM()
         {
-            EmployeeVMs = [.. model
+            EmployeeVMs = model
             .Select(e => new IndexVM.EmployeeVM()
             {
                 Id = e.Id,
                 Name = e.Name,
                 ShowAsHighlighted = service.CheckIsVIP(e),
-            })]
+            }).ToArray()
         };
 
         return View(viewModel);
@@ -47,15 +47,15 @@ public class EmployeesController(IEmployeeService service) : Controller
             Salary = viewModel.Salary,
         };
 
-        service.Add(employee);
-        return RedirectToAction(nameof(Index));
+        service.AddAsync(employee);
+        return RedirectToAction(nameof(IndexAsync).Replace("Async", string.Empty));
     }
 
     [HttpGet("details/{id}")]
     [TypeFilter(typeof(MyLogTypeFilterAttribute))]
-    public IActionResult Details(int id)
+    public async Task<IActionResult> DetailsAsync(int id)
     {
-        var model = service.GetById(id);
+        var model = await service.GetByIdAsync(id);
 
         DetailsVM viewModel = new()
         {

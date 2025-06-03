@@ -14,11 +14,15 @@ public class EmployeeService(IEmployeeRepository employeeRepository) : IEmployee
 
     string ToInitalCapital(string s) => $"{s[..1].ToUpper()}{s[1..]}";
 
-    public async Task<Employee[]> GetAllAsync() => await employeeRepository.GetAllAsync().OrderBy(e => e.Name).ToArrayAsync();
-
-    public Employee? GetById(int id)
+    public async Task<Employee[]> GetAllAsync()
     {
-        Employee? employee = employeeRepository.GetById(id);
+        return (await employeeRepository
+            .GetAllAsync()).OrderBy(e => e.Name).ToArray();
+    }
+
+    public async Task<Employee?> GetByIdAsync(int id)
+    {
+        Employee? employee = await employeeRepository.GetByIdAsync(id);
 
         return employee is null ?
             throw new ArgumentException($"Invalid parameter value: {id}", nameof(id)) :
